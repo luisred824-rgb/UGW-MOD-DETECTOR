@@ -1,0 +1,167 @@
+--// SAMS UGW MOD DETECTION (DRAGGING FIXED) //--
+
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+--// CREATE GUI
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "SAM_UGW_DETECTION"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = PlayerGui
+
+--// MAIN FRAME (SMALL)
+local Frame = Instance.new("Frame")
+Frame.Size = UDim2.new(0, 180, 0, 130)
+Frame.Position = UDim2.new(0.05, 0, 0.25, 0)
+Frame.BackgroundColor3 = Color3.fromRGB(25, 0, 40)
+Frame.BorderSizePixel = 0
+Frame.Parent = ScreenGui
+
+--// DRAGGING SYSTEM
+do
+ local dragging = false
+ local dragInput = nil
+ local dragStart = nil
+ local startPos = nil
+
+ local function update(input)
+ local delta = input.Position - dragStart
+ Frame.Position = UDim2.new(
+ startPos.X.Scale, startPos.X.Offset + delta.X,
+ startPos.Y.Scale, startPos.Y.Offset + delta.Y
+ )
+ end
+
+ Frame.InputBegan:Connect(function(input)
+ if input.UserInputType == Enum.UserInputType.MouseButton1
+ or input.UserInputType == Enum.UserInputType.Touch then
+
+ dragging = true
+ dragStart = input.Position
+ startPos = Frame.Position
+
+ input.Changed:Connect(function()
+ if input.UserInputState == Enum.UserInputState.End then
+ dragging = false
+ end
+ end)
+ end
+ end)
+
+ Frame.InputChanged:Connect(function(input)
+ if input.UserInputType == Enum.UserInputType.MouseMovement
+ or input.UserInputType == Enum.UserInputType.Touch then
+ dragInput = input
+ end
+ end)
+
+ UserInputService.InputChanged:Connect(function(input)
+ if input == dragInput and dragging then
+ update(input)
+ end
+ end)
+end
+
+--// PURPLE GLOW ANIMATION
+task.spawn(function()
+ while true do
+ for i = 0, 1, 0.02 do
+ Frame.BackgroundColor3 = Color3.fromHSV(0.78, 1, i)
+ task.wait(0.02)
+ end
+ for i = 1, 0, -0.02 do
+ Frame.BackgroundColor3 = Color3.fromHSV(0.78, 1, i)
+ task.wait(0.02)
+ end
+ end
+end)
+
+--// TITLE
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, 0, 0, 25)
+Title.BackgroundTransparency = 1
+Title.Text = "SAMS UGW MOD DETECTION"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 12
+Title.Parent = Frame
+
+--// TOGGLE BUTTON
+local Toggle = Instance.new("TextButton")
+Toggle.Size = UDim2.new(1, -20, 0, 35)
+Toggle.Position = UDim2.new(0, 10, 0, 35)
+Toggle.Text = "OFF"
+Toggle.Font = Enum.Font.GothamBold
+Toggle.TextSize = 20
+Toggle.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+Toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+Toggle.Parent = Frame
+
+--// INDICATOR
+local Indicator = Instance.new("TextLabel")
+Indicator.Size = UDim2.new(1, 0, 0, 20)
+Indicator.Position = UDim2.new(0, 0, 0, 75)
+Indicator.BackgroundTransparency = 1
+Indicator.Text = "Status: OFF"
+Indicator.Font = Enum.Font.Gotham
+Indicator.TextSize = 12
+Indicator.TextColor3 = Color3.fromRGB(255, 100, 100)
+Indicator.Parent = Frame
+
+--// 50 USERNAME SLOTS (YOU EDIT THESE IN SCRIPT)
+local WatchList = {
+ "Blistent", "Khamilis", "MiliZOfficial", "Thewiggelsworth", "weekndIover",
+ "speckeleddeer", "ItsMintDreamS", "ineffablezz", "abcd098_3", "",
+ "", "", "", "", "", "", "", "", "", "",
+ "", "", "", "", "", "", "", "", "", "",
+ "", "", "", "", "", "", "", "", "", "",
+ "", "", "", "", "", "", "", "", "", ""
+}
+
+--// DETECTION FUNCTION (UPDATED WITH USERNAME)
+local function checkPlayers()
+ for _, name in ipairs(WatchList) do
+ if name ~= "" then
+ for _, p in ipairs(Players:GetPlayers()) do
+ if p.Name:lower() == name:lower() then
+
+ LocalPlayer:Kick(
+ "UGW MOD HAS BEEN DETECTED! - SW Script\n" ..
+ "Detected: " .. p.Name
+ )
+
+ end
+ end
+ end
+ end
+end
+
+-- Trigger check when someone joins
+Players.PlayerAdded:Connect(function()
+ if Toggle.Text == "ON" then
+ checkPlayers()
+ end
+end)
+
+--// TOGGLE SYSTEM
+local Enabled = false
+
+Toggle.MouseButton1Click:Connect(function()
+ Enabled = not Enabled
+
+ if Enabled then
+ Toggle.Text = "ON"
+ Toggle.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
+ Indicator.Text = "Status: ON"
+ Indicator.TextColor3 = Color3.fromRGB(100, 255, 100)
+
+ checkPlayers()
+ else
+ Toggle.Text = "OFF"
+ Toggle.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
+ Indicator.Text = "Status: OFF"
+ Indicator.TextColor3 = Color3.fromRGB(255, 100, 100)
+ end
+end)
