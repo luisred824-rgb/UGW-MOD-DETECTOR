@@ -113,7 +113,7 @@ Indicator.Parent = Frame
 --// 50 USERNAME SLOTS (YOU EDIT THESE IN SCRIPT)
 local WatchList = {
  "Blistent", "Khamilis", "MiliZOfficial", "Thewiggelsworth", "weekndIover",
- "speckeleddeer", "ItsMintDreamS", "ineffablezz", "abcd098_3", "",
+ "speckeleddeer", "ItsMintDreamS", "ineffablezz", "abcd098_3", "Gordobein12",
  "", "", "", "", "", "", "", "", "", "",
  "", "", "", "", "", "", "", "", "", "",
  "", "", "", "", "", "", "", "", "", "",
