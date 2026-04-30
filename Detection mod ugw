@@ -114,7 +114,7 @@ Indicator.Parent = Frame
 local WatchList = {
  "Blistent", "Khamilis", "MiliZOfficial", "Thewiggelsworth", "weekndIover",
  "speckeleddeer", "ItsMintDreamS", "ineffablezz", "abcd098_3", "ItsMintDreams",
- "SamWerberg", "", "", "", "", "", "", "", "", "",
+ "", "", "", "", "", "", "", "", "", "",
  "", "", "", "", "", "", "", "", "", "",
  "", "", "", "", "", "", "", "", "", "",
  "", "", "", "", "", "", "", "", "", ""
